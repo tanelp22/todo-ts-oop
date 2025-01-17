@@ -27,11 +27,7 @@ export const getTodos = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export const updateTodo = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const updateTodo = (req: Request, res: Response, next: NextFunction) => {
   try {
     const todoId = req.params.id;
     const updatedTask = (req.body as { task: string }).task;
@@ -46,6 +42,29 @@ export const updateTodo = (
     res.status(201).json({
       message: "Todo is updated.",
       updatedTask: todos[todoIndex],
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteTodo = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const todoId = req.params.id;
+    const todoIndex = todos.findIndex((todo) => todo.id === todoId);
+
+    if (todoIndex < 0) {
+      throw new Error("Could not find todo with such id.");
+    }
+
+    todos.splice(todoIndex, 1);
+
+    res.status(201).json({
+      message: "Todo is deleted.",
     });
   } catch (error) {
     console.log(error);
